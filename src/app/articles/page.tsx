@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -35,6 +36,9 @@ const schema = z.object({
 })
 
 export default function Articles() {
+  const [articles, setArticles] = useState([])
+  const [loading, setLoading] = useState(true)
+
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -43,9 +47,25 @@ export default function Articles() {
     },
   })
 
+  useEffect(() => {
+    async function fetchArticles() {
+      try {
+        const response = await fetch("https://test-fe.mysellerpintar.com/api/articles")
+        const json = await response.json()
+        setArticles(json.data)
+      } catch (error) {
+        console.error("Failed to fetch articles", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchArticles()
+  }, [])
+
   function onSubmit(values) {
     console.log("Form submitted:", values)
-    // Di sini bisa tambahkan logic filter artikel
+    // Di sini bisa tambahkan logic untuk refetch dengan query param
   }
 
   return (
@@ -64,75 +84,80 @@ export default function Articles() {
 
           <div className="bg-blue-500 w-full p-2 rounded-md flex justify-between">
             {/* Form Filter */}
-            <Form {...form} >
-                <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-row space-x-4 w-full"
-                >
+            <Form {...form}>
+              {/* Pindahkan onSubmit ke Form */}
+              <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-row space-x-4 w-full">
                 {/* Select Kategori */}
                 <FormField
-                    control={form.control}
-                    name="category"
-                    render={({ field }) => (
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
                     <FormItem className="w-1/3">
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                            <SelectTrigger className="w-full bg-white">
+                          <SelectTrigger className="w-full bg-white">
                             <SelectValue placeholder="Select category" />
-                            </SelectTrigger>
+                          </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                            <SelectItem value="paper">Paper</SelectItem>
-                            <SelectItem value="news">News</SelectItem>
+                          <SelectItem value="paper">Paper</SelectItem>
+                          <SelectItem value="news">News</SelectItem>
                         </SelectContent>
-                        </Select>
-                        <FormMessage />
+                      </Select>
+                      <FormMessage />
                     </FormItem>
-                    )}
+                  )}
                 />
 
                 {/* Input Pencarian */}
                 <FormField
-                    control={form.control}
-                    name="search"
-                    render={({ field }) => (
-                    <FormItem className="w-2/3 ">
-                        <div className="relative ">
-                        <FormControl>
-                            <>
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
-                            <Input
-                                type="text"
-                                placeholder="Search articles"
-                                className="pl-10 bg-white"
-                                {...field}
-                            />
-                            </>
-                        </FormControl>
+                  control={form.control}
+                  name="search"
+                  render={({ field }) => (
+                    <FormItem className="w-2/3">
+                      <div className="relative">
+                      <FormControl>
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+                          <Input
+                            type="text"
+                            placeholder="Search articles"
+                            className="pl-10 bg-white"
+                            {...field}
+                          />
                         </div>
-                        <FormMessage />
+                      </FormControl>
+                      </div>
+                      <FormMessage />
                     </FormItem>
-                    )}
+                  )}
                 />
-                </form>
+              </form>
             </Form>
+
           </div>
         </div>
       </div>
       <div className="mx-[100px] mt-[40px] mb-[100px]">
-        <p>Showing : 20 of 240 articles</p>
-        <div className="flex flex-row justify-center items-center gap-[60px] flex-wrap pb-[60px]">
-          <ArticleCard/>
-          <ArticleCard/>
-          <ArticleCard/>
-          <ArticleCard/>
-          <ArticleCard/>
-          <ArticleCard/>
-          <ArticleCard/>
-          <ArticleCard/>
-          <ArticleCard/>
-        </div>
-        <Pagination/>
+        <p>Showing: {articles.length} articles</p>
+          {loading ? (
+            <p>Loading articles...</p>
+          ) : (
+            <div className="flex flex-row justify-center items-center gap-[60px] flex-wrap pb-[60px]">
+              {articles.map((article) => (
+                <ArticleCard
+                  key={article.id}
+                  id={article.id}
+                  title={article.title}
+                  image={article.imageUrl}
+                  content={article.content}
+                  createdAt={article.createdAt}
+                  category={article.category.name}
+                />
+              ))}
+            </div>
+          )}
+          <Pagination />
       </div>
     </div>
     <Footer/>

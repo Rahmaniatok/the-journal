@@ -1,6 +1,8 @@
-'use client';
+"use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react"
+import axios from "axios"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -16,6 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Eye, EyeOff } from "lucide-react"
+import { getProfile } from "@/lib/auth";
 
 const schema = z.object({
   username: z.string().min(1, "Please enter your username"),
@@ -23,7 +26,9 @@ const schema = z.object({
 })
 
 export default function SignIn() {
+  const router = useRouter(); // ⬅️ tambahkan ini
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(schema),
@@ -33,20 +38,43 @@ export default function SignIn() {
     },
   })
 
-  function onSubmit(values) {
-    console.log(values)
-  }
+  const onSubmit = async (values) => {
+    try {
+      setLoading(true);
+      const response = await axios.post("https://test-fe.mysellerpintar.com/api/auth/login", {
+        username: values.username,
+        password: values.password,
+      });
 
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+
+      const profile = await getProfile(token);
+
+      if (profile.role === "User") {
+        router.push("/articles");
+      } else if (profile.role === "Admin") {
+        router.push("/admin-articles");
+      } else {
+        alert("Unknown role, cannot redirect.");
+      }
+ 
+ 
+      } catch (error) {
+      console.error("Register/Login Error:", error);
+      alert("Something went wrong");
+      } finally {
+      setLoading(false);
+      }
+ 
+  };
   return (
     <div className="bg-[#F3F4F6] min-h-screen items-center flex justify-center">
       <div className="bg-white w-[400px] h-fit rounded-xl flex flex-col justify-center gap-[24px] p-[16px]">
-        {/* Logo */}
-        <img src="logoipsum.png" className="object-none"></img>
+        <img src="logoipsum.png" className="object-none" />
 
-        {/* Form */}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-4">
-            {/* Username Field */}
             <FormField
               control={form.control}
               name="username"
@@ -61,7 +89,6 @@ export default function SignIn() {
               )}
             />
 
-            {/* Password Field */}
             <FormField
               control={form.control}
               name="password"
@@ -93,12 +120,15 @@ export default function SignIn() {
               )}
             />
 
-            <Button type="submit" className="bg-blue-600">Login</Button>
+            <Button type="submit" className="bg-blue-600" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
+            </Button>
           </form>
         </Form>
+
         <div className="flex justify-center text-sm">
-          <text>Don't have an account?</text>
-          <text className="">Register</text>
+          <span>Don't have an account?&nbsp;</span>
+          <span className="text-blue-600 cursor-pointer">Register</span>
         </div>
       </div>
     </div>

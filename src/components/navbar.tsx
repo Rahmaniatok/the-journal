@@ -1,15 +1,32 @@
 import { useState, useRef, useEffect } from "react";
 import { LogOut } from "lucide-react";
 import { LogoutDialog } from "./logoutdialog";
+import { getProfile } from "@/lib/auth"; // Import fungsi getProfile
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [username, setUsername] = useState("");
   const dropdownRef = useRef(null);
+
+  // Fetch profile saat komponen mount
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const profile = await getProfile(token);
+      if (profile) {
+        setUsername(profile.username);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   // Menutup dropdown saat klik di luar
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !(dropdownRef.current as any).contains(event.target)) {
         setIsOpen(false);
       }
     };
@@ -28,7 +45,9 @@ function Navbar() {
               onClick={() => setIsOpen(!isOpen)}
             >
               <img src="/profile.png" alt="Profile" className="w-10 h-10 rounded-full" />
-              <div className="text-white text-base px-2">James Dean</div>
+              <div className="text-white text-base px-2">
+                {username || "Loading..."}
+              </div>
             </div>
 
             {/* Dropdown */}

@@ -26,6 +26,17 @@ export default async function DetailArticlePage({ params }: Params) {
     day: "numeric",
   });
 
+  const relatedRes = await fetch(
+    `https://test-fe.mysellerpintar.com/api/articles?category=${article.category.id}`,
+    { next: { revalidate: 60 } }
+  );
+  
+  const relatedArticles = await relatedRes.json();
+  
+  // Filter: hilangkan artikel yang sedang dibaca
+  const filteredRelatedArticles = relatedArticles.data.filter((a: any) => a.id !== article.id);
+  
+
   return (
     <>
       <DarkNavbar />
@@ -66,9 +77,21 @@ export default async function DetailArticlePage({ params }: Params) {
           <section className="w-full h-fit flex flex-col justify-center">
             <h2 className="text-xl font-bold mb-6">Other articles</h2>
             <div className="w-full flex flex-col justify-around items-center gap-x-6 pb-[60px] md:flex-row flex-wrap">
-              <ArticleCard />
-              <ArticleCard />
-              <ArticleCard />
+                {filteredRelatedArticles.slice(0, 3).map((item) => (
+                    <ArticleCard
+                    key={item.id}
+                    id={item.id}
+                    title={item.title}
+                    image={item.imageUrl}
+                    content={item.content}
+                    createdAt={new Date(item.createdAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                    })}
+                    category={item.category?.name ?? "Uncategorized"}
+                    />
+                ))}
             </div>
           </section>
         </div>
