@@ -18,14 +18,38 @@ import ArticleCard from "@/components/card-article"
 import Pagination from "@/components/pagination"
 import Footer from "@/components/footer"
 
+type Article = {
+  id: string;
+  title: string;
+  content: string;
+  imageUrl: string;
+  createdAt: string;
+  category: {
+    id: string;
+    name: string;
+  };
+};
+
+type Category = {
+  id: string;
+  name: string;
+};
+
+type ArticleQueryParams = {
+  category?: string;
+  title?: string;
+  limit?: number;
+  page?: number;
+};
+
 const schema = z.object({
   category: z.string().optional(),
   search: z.string().optional(),
 })
 
 export default function Articles() {
-  const [articles, setArticles] = useState([])
-  const [categories, setCategories] = useState([])
+  const [articles, setArticles] = useState<Article[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -41,7 +65,7 @@ export default function Articles() {
     },
   })
 
-  const fetchArticles = async (params: any = {}) => {
+  const fetchArticles = async (params: ArticleQueryParams = {}) => {
     setLoading(true)
     try {
       const query = new URLSearchParams({ ...params, limit: '9', page: currentPage.toString() }).toString()
@@ -72,7 +96,7 @@ export default function Articles() {
 
   useEffect(() => {
     const values = form.getValues();
-    const query: any = {
+    const query: ArticleQueryParams = {
       limit: 9,
       page: currentPage,
     };
@@ -85,8 +109,8 @@ export default function Articles() {
     fetchCategories()
   }, [])
 
-  const onSubmit = (values: any) => {
-    const query: any = {
+  const onSubmit = (values: z.infer<typeof schema>) => {
+    const query: ArticleQueryParams = {
       limit: 9,
       page: 1,
     };

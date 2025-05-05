@@ -9,6 +9,21 @@ interface Params {
   };
 }
 
+type Article = {
+  id: string;
+  title: string;
+  content: string;
+  imageUrl: string;
+  createdAt: string;
+  category: {
+    id: string;
+    name: string;
+  };
+  user?: {
+    username: string;
+  };
+};
+
 export default async function DetailArticlePage({ params }: Params) {
   const { id } = params;
 
@@ -31,10 +46,10 @@ export default async function DetailArticlePage({ params }: Params) {
     { next: { revalidate: 60 } }
   );
   
-  const relatedArticles = await relatedRes.json();
+  const relatedArticles: { data: Article[] } = await relatedRes.json();
   
   // Filter: hilangkan artikel yang sedang dibaca
-  const filteredRelatedArticles = relatedArticles.data.filter((a: any) => a.id !== article.id);
+  const filteredRelatedArticles = relatedArticles.data.filter((a) => a.id !== article.id);
   
 
   return (

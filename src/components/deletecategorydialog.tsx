@@ -54,7 +54,7 @@ export function DeleteCategoryDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Category</AlertDialogTitle>
           <AlertDialogDescription>
-            Delete category "{name}"? This will remove it from master data permanently.
+            Delete category &quot;{name}&quot;? This will remove it from master data permanently.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

@@ -129,7 +129,7 @@ export default function SignIn() {
         </Form>
 
         <div className="flex justify-center text-sm">
-          <span>Don't have an account?&nbsp;</span>
+          <span>Don&apos;t have an account?&nbsp;</span>
           <a href="/register" className="underline text-blue-600 cursor-pointer">Register</a>
         </div>
       </div>

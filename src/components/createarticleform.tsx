@@ -10,6 +10,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ImagePlus, Bold, Italic, Image, AlignLeft, AlignCenter, AlignRight, AlignJustify, Undo, Redo } from "lucide-react";
 
+type ArticleFormData = {
+  thumbnail: FileList;
+  title: string;
+  category: string;
+  content: string;
+};
+
+type Category = {
+  id: string;
+  name: string;
+};
+
 const schema = z.object({
   thumbnail: z
     .any()
@@ -34,7 +46,7 @@ interface CreateArticleFormProps {
 
 export default function CreateArticleForm({ mode = 'create', defaultValues }: CreateArticleFormProps) {
   const router = useRouter();
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<ArticleFormData>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues ? {
       title: defaultValues.title,
@@ -45,7 +57,7 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
 
   const [content, setContent] = useState(defaultValues?.content || "");
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(defaultValues?.imageUrl || null);
   
   useEffect(() => {
@@ -62,27 +74,15 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
     fetchCategories();
   }, []);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: ArticleFormData) => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      let imageUrl = defaultValues?.imageUrl || "";
 
       // Upload thumbnail
       if (data.thumbnail && data.thumbnail[0]) {
         const formData = new FormData();
         formData.append("image", data.thumbnail[0]);
-
-        const uploadRes = await fetch("https://test-fe.mysellerpintar.com/api/upload", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        });
-
-        const uploadData = await uploadRes.json();
-        imageUrl = uploadData.imageUrl;
       }
 
       // Submit article
@@ -205,7 +205,7 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
           defaultValue={defaultValues?.categoryId || ""}
         >
           <option value="" disabled>Select category</option>
-          {categories.map((cat: any) => (
+          {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>{cat.name}</option>
           ))}
         </select>

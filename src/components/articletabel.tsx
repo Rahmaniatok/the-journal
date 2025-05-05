@@ -17,7 +17,6 @@ interface Article {
 
 export default function ArticleTable() {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -28,7 +27,6 @@ export default function ArticleTable() {
         const profile = await getProfile(token);
         if (!profile?.id) return;
 
-        setUserId(profile.id);
         const query = new URLSearchParams({ userId: profile.id, limit: "10", page: "1" }).toString();
         const res = await fetch(`https://test-fe.mysellerpintar.com/api/articles?${query}`);
         const json = await res.json();
