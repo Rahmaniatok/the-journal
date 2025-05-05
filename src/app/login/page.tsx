@@ -48,6 +48,8 @@ export default function SignIn() {
 
       const token = response.data.token;
       localStorage.setItem("token", token);
+      localStorage.setItem("user_password", values.password);
+
 
       const profile = await getProfile(token);
 
@@ -69,8 +71,8 @@ export default function SignIn() {
  
   };
   return (
-    <div className="bg-[#F3F4F6] min-h-screen items-center flex justify-center">
-      <div className="bg-white w-[400px] h-fit rounded-xl flex flex-col justify-center gap-[24px] p-[16px]">
+    <div className="bg-[#F3F4F6] h-screen items-center flex justify-center">
+      <div className="bg-white w-full md:w-[400px] h-full md:h-fit rounded-xl flex flex-col justify-center gap-[24px] p-[16px]">
         <img src="logoipsum.png" className="object-none" />
 
         <Form {...form}>
@@ -128,7 +130,7 @@ export default function SignIn() {
 
         <div className="flex justify-center text-sm">
           <span>Don't have an account?&nbsp;</span>
-          <span className="text-blue-600 cursor-pointer">Register</span>
+          <a href="/register" className="underline text-blue-600 cursor-pointer">Register</a>
         </div>
       </div>
     </div>

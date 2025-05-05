@@ -38,10 +38,11 @@ export default async function DetailArticlePage({ params }: Params) {
   
 
   return (
-    <>
-      <DarkNavbar />
-      <main className="bg-white w-screen h-full pt-[100px]">
-        <article className="flex flex-col justify-center mx-[160px]">
+  <>
+    <DarkNavbar />
+    <div className="min-h-screen flex flex-col">
+      <main className="flex-1 bg-white w-full pt-[100px]">
+        <article className="flex flex-col justify-center mx-[20px] md:mx-[160px]">
           {/* Metadata */}
           <div className="flex flex-col justify-center">
             <div className="w-full h-fit">
@@ -60,7 +61,7 @@ export default async function DetailArticlePage({ params }: Params) {
               <img
                 src={article.imageUrl}
                 alt={article.title}
-                className="w-full object-cover rounded-xl my-[40px]"
+                className="w-full h-auto max-h-[480px] object-cover rounded-xl my-[40px]"
               />
             )}
 
@@ -72,31 +73,32 @@ export default async function DetailArticlePage({ params }: Params) {
           </div>
         </article>
 
-        {/* Other articles (placeholder) */}
-        <div className="w-full h-fit px-[180px] pt-[40px] pb-[100px]">
+        {/* Related Articles */}
+        <div className="w-full h-fit px-[20px] md:px-[180px] pt-[40px] md:pb-[100px]">
           <section className="w-full h-fit flex flex-col justify-center">
             <h2 className="text-xl font-bold mb-6">Other articles</h2>
             <div className="w-full flex flex-col justify-around items-center gap-x-6 pb-[60px] md:flex-row flex-wrap">
-                {filteredRelatedArticles.slice(0, 3).map((item) => (
-                    <ArticleCard
-                    key={item.id}
-                    id={item.id}
-                    title={item.title}
-                    image={item.imageUrl}
-                    content={item.content}
-                    createdAt={new Date(item.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                    })}
-                    category={item.category?.name ?? "Uncategorized"}
-                    />
-                ))}
+              {filteredRelatedArticles.slice(0, 3).map((item) => (
+                <ArticleCard
+                  key={item.id}
+                  id={item.id}
+                  title={item.title}
+                  image={item.imageUrl}
+                  content={item.content}
+                  createdAt={new Date(item.createdAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                  category={item.category?.name ?? "Uncategorized"}
+                />
+              ))}
             </div>
           </section>
         </div>
       </main>
       <Footer />
-    </>
+    </div>
+  </>
   );
 }

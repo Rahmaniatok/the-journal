@@ -16,25 +16,34 @@ export default function ArticleCard({ id, title, image, content, createdAt, cate
   return (
     <Card
       onClick={() => router.push(`/articles/${id}`)}
-      className="w-full min-w-[380px] max-w-[400px] h-fit border-white cursor-pointer hover:shadow-lg transition"
+      className="w-full md:min-w-[380px] max-w-[400px] h-[500px] border-white cursor-pointer hover:shadow-lg transition flex flex-col"
     >
+      {/* Gambar */}
       <CardContent className="p-0">
         <img
           src={image}
           alt={title}
-          className="h-[240px] w-full object-cover rounded-t-xl"
+          className="h-[240px] w-full object-cover rounded-xl"
         />
       </CardContent>
 
-      <CardHeader>
-        <p className="text-sm text-muted-foreground">{createdAt}</p>
-        <CardTitle className="text-lg">{title}</CardTitle>
-        <CardDescription>
+      {/* Konten */}
+      <div className="flex-1 flex flex-col px-[24px] pt-[12px] pb-0 overflow-hidden">
+      <p className="text-sm text-muted-foreground">
+        {new Date(createdAt).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "2-digit",
+        })}
+      </p>
+        <CardTitle className="text-lg mt-1">{title}</CardTitle>
+        <CardDescription className="mt-1 text-sm max-h-[4.5rem] overflow-hidden text-ellipsis">
           {content}
         </CardDescription>
-      </CardHeader>
+      </div>
 
-      <CardFooter>
+      {/* Footer */}
+      <CardFooter className="mt-auto px-[24px] pb-[16px]">
         <span className="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full">
           {category}
         </span>

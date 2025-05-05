@@ -95,9 +95,17 @@ export default function Register() {
   
       // 3. Simpan token
       localStorage.setItem("token", loginData.token);
-  
-      const profile = loginData.profile
-      // Redirect berdasarkan role
+      localStorage.setItem("user_password", values.password); // kalau mau ditampilkan di /userprofile
+
+      // 4. Fetch profile secara manual
+      const profileRes = await fetch("https://test-fe.mysellerpintar.com/api/auth/profile", {
+        headers: {
+          Authorization: `Bearer ${loginData.token}`,
+        },
+      });
+      const profile = await profileRes.json();
+
+      // 5. Redirect berdasarkan role
       if (profile.role === "User") {
         router.push("/articles");
       } else if (profile.role === "Admin") {
@@ -105,7 +113,6 @@ export default function Register() {
       } else {
         alert("Unknown role, cannot redirect.");
       }
-
       } catch (error) {
       console.error("Register/Login Error:", error);
       alert("Something went wrong");
@@ -115,8 +122,8 @@ export default function Register() {
   }
 
   return (
-    <div className="bg-[#F3F4F6] min-h-screen items-center flex justify-center">
-      <div className="bg-white w-[400px] h-fit rounded-xl flex flex-col justify-center gap-[24px] p-[16px]">
+    <div className="bg-[#F3F4F6] h-screen items-center flex justify-center">
+      <div className="bg-white w-full md:w-[400px] h-full md:h-fit rounded-xl flex flex-col justify-center gap-[24px] p-[16px]">
         <img src="logoipsum.png" className="object-none" />
 
         <Form {...form}>
@@ -191,8 +198,8 @@ export default function Register() {
         </Form>
 
         <div className="flex justify-center text-sm">
-          <span>Already have an account? </span>
-          <span className="ml-1 font-semibold text-blue-600 cursor-pointer">Login</span>
+          <span>Already have an account?&nbsp;</span>
+          <a href="/login" className="underline text-blue-600 cursor-pointer">Login</a>
         </div>
       </div>
     </div>

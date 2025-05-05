@@ -1,26 +1,21 @@
 "use client";
 
-import { useState } from "react";
 import { DeleteCategoryDialog } from "./deletecategorydialog";
 import { EditCategoryDialog } from "./editcategorydialog";
 
-export default function CategoryTable() {
-  const [categories, setCategories] = useState([
-    {
-      id: 1,
-      name: "Technology",
-      createdAt: "2025-04-13T10:55:12",
-    },
-  ]);
+interface Category {
+  id: string;
+  name: string;
+  createdAt: string;
+}
 
-  const handleEdit = (id: number, newName: string) => {
-    setCategories((prev) =>
-      prev.map((cat) =>
-        cat.id === id ? { ...cat, name: newName } : cat
-      )
-    );
-  };
-
+export default function CategoryTable({
+  data,
+  onRefresh,
+}: {
+  data: Category[];
+  onRefresh: () => void;
+}) {
   return (
     <div className="bg-white overflow-x-auto">
       <table className="min-w-full text-sm text-center text-slate-900">
@@ -32,7 +27,7 @@ export default function CategoryTable() {
           </tr>
         </thead>
         <tbody>
-          {categories.map((category) => (
+          {data.map((category) => (
             <tr key={category.id} className="border-b border-slate-200 bg-gray-50">
               <td className="px-[16px] py-[12px] text-slate-600">{category.name}</td>
               <td className="px-[16px] py-[12px] text-slate-600">
@@ -48,10 +43,15 @@ export default function CategoryTable() {
               </td>
               <td className="px-[16px] py-[12px] flex justify-center gap-[12px]">
                 <EditCategoryDialog
+                  id={category.id}
                   initialValue={category.name}
-                  onAdd={(newName) => handleEdit(category.id, newName)}
+                  onSuccess={onRefresh} // ✅ refresh table
                 />
-                <DeleteCategoryDialog onDelete={() => console.log("Delete confirmed")} />
+                <DeleteCategoryDialog
+                  id={category.id}
+                  name={category.name}
+                  onSuccess={onRefresh}
+                />
               </td>
             </tr>
           ))}
