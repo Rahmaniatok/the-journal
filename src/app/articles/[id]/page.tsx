@@ -18,8 +18,11 @@ type Article = {
   };
 };
 
-export default async function DetailArticlePage({ params }: { params: { id: string } }) {
-  const { id } = params;
+type Params = Promise<{ id: string[] }>;
+
+
+export default async function DetailArticlePage({ params }: { params: Params }) {
+  const { id } = await params;
 
   const res = await fetch(`https://test-fe.mysellerpintar.com/api/articles/${id}`, {
     next: { revalidate: 60 },
