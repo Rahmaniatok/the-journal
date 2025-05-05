@@ -18,15 +18,11 @@ type Article = {
   };
 };
 
-export default async function DetailArticlePage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function DetailArticlePage({ params }: { params: { id: string } }) {
   const { id } = params;
 
   const res = await fetch(`https://test-fe.mysellerpintar.com/api/articles/${id}`, {
-    next: { revalidate: 60 }, // optional caching
+    next: { revalidate: 60 },
   });
 
   if (!res.ok) return notFound();
