@@ -3,12 +3,6 @@ import DarkNavbar from "@/components/darknavbar";
 import ArticleCard from "@/components/card-article";
 import Footer from "@/components/footer";
 
-interface Params {
-  params: {
-    id: string;
-  };
-}
-
 type Article = {
   id: string;
   title: string;
@@ -24,7 +18,11 @@ type Article = {
   };
 };
 
-export default async function DetailArticlePage({ params }: Params) {
+export default async function DetailArticlePage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const { id } = params;
 
   const res = await fetch(`https://test-fe.mysellerpintar.com/api/articles/${id}`, {
