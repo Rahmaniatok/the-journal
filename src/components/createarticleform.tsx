@@ -1,5 +1,3 @@
-// ✅ Modified CreateArticleForm with PUT method for edit mode
-
 'use client';
 
 import { useForm } from "react-hook-form";

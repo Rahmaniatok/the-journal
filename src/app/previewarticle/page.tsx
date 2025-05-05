@@ -1,5 +1,3 @@
-// ✅ Page for previewing article *before* posting (client-side only preview)
-
 'use client';
 
 import { useEffect, useState } from 'react';

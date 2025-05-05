@@ -1,6 +1,3 @@
-"use client";
-import { redirect } from "next/navigation";
-
 export async function getProfile(token) {
     try {
       const res = await fetch("https://test-fe.mysellerpintar.com/api/auth/profile", {

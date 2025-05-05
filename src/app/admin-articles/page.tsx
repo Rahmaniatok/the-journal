@@ -7,7 +7,7 @@ import AdminNavbar from "@/components/adminnavbar";
 import AdminSidebar from "@/components/adminsidebar";
 import Pagination from "@/components/pagination";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Search, Plus } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 import Link from "node_modules/next/link";
 
 export default function AdminArticles() {

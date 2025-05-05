@@ -6,7 +6,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@/components/ui/input"
 import {
-  Form, FormField, FormItem, FormLabel, FormControl, FormMessage,
+  Form, FormField, FormItem, FormControl, FormMessage,
 } from "@/components/ui/form"
 import {
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem,

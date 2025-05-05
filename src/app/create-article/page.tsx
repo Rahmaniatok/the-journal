@@ -1,9 +1,6 @@
 import AdminNavbar from "@/components/adminnavbar";
 import AdminSidebar from "@/components/adminsidebar";
-import ArticleTable from "@/components/articletabel";
 import CreateArticleForm from "@/components/createarticleform";
-import Pagination from "@/components/pagination";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 export default function AdminArticles() {
