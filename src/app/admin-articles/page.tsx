@@ -10,9 +10,14 @@ import { Button } from "@/components/ui/button";
 import { Search, Plus } from "lucide-react";
 import Link from "node_modules/next/link";
 
+type Category = {
+  id: string;
+  name: string;
+};
+
 export default function AdminArticles() {
   const [articles, setArticles] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
