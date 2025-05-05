@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import DarkNavbar from "@/components/darknavbar";
 import ArticleCard from "@/components/card-article";
 import Footer from "@/components/footer";
+import type { Metadata } from "next";
 
 type Article = {
   id: string;
@@ -18,7 +19,19 @@ type Article = {
   };
 };
 
-export default async function DetailArticlePage({ params }: { params: { id: string } }) {
+type PageProps = {
+  params: {
+    id: string;
+  };
+};
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  return {
+    title: `Article ${params.id}`,
+  };
+}
+
+export default async function DetailArticlePage({ params }: PageProps) {
   const { id } = params;
 
   const res = await fetch(`https://test-fe.mysellerpintar.com/api/articles/${id}`, {
