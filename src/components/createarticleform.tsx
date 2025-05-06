@@ -9,13 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  ImagePlus, Bold, Italic, Image,
-  AlignLeft, AlignCenter, AlignRight, AlignJustify,
-  Undo, Redo
+  ImagePlus, Bold, Italic, Image, AlignLeft, AlignCenter, AlignRight, AlignJustify, Undo, Redo,
 } from "lucide-react";
 
 type ArticleFormData = {
-  thumbnail: FileList;
   title: string;
   category: string;
   content: string;
@@ -47,17 +44,20 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
   const router = useRouter();
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<ArticleFormData>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues ? {
-      title: defaultValues.title,
-      content: defaultValues.content,
-      category: defaultValues.categoryId,
-    } : {}
+    defaultValues: defaultValues
+      ? {
+          title: defaultValues.title,
+          content: defaultValues.content,
+          category: defaultValues.categoryId,
+        }
+      : {},
   });
 
   const [content, setContent] = useState(defaultValues?.content || "");
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(defaultValues?.imageUrl || null);
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -69,6 +69,7 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
         console.error("Failed to fetch categories", error);
       }
     };
+
     fetchCategories();
   }, []);
 
@@ -76,25 +77,30 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
+      let imageUrl = previewUrl;
 
-      // Upload thumbnail (optional)
-      if (data.thumbnail && data.thumbnail[0]) {
+      // Upload image jika ada thumbnail baru
+      if (thumbnailFile) {
         const formData = new FormData();
-        formData.append("image", data.thumbnail[0]);
+        formData.append("image", thumbnailFile);
 
-        await fetch("https://test-fe.mysellerpintar.com/api/upload", {
+        const uploadRes = await fetch("https://test-fe.mysellerpintar.com/api/upload", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
           },
           body: formData,
         });
+
+        const uploadData = await uploadRes.json();
+        imageUrl = uploadData.url;
       }
 
       const payload = {
         title: data.title,
         content: data.content,
         categoryId: data.category,
+        imageUrl,
       };
 
       const endpoint = mode === 'edit'
@@ -107,7 +113,7 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
         method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
@@ -139,12 +145,11 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
           id="thumbnail-upload"
           className="hidden"
           onChange={(e) => {
-            const files = e.target.files;
-            if (files && files.length > 0) {
-              setValue("thumbnail", files);
-              const file = files[0];
+            const file = e.target.files?.[0];
+            if (file) {
               const url = URL.createObjectURL(file);
               setPreviewUrl(url);
+              setThumbnailFile(file);
             }
           }}
         />
@@ -159,11 +164,7 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
         ) : (
           <div className="flex flex-col items-center">
             <label htmlFor="thumbnail-upload" className="cursor-pointer">
-              <img
-                src={previewUrl}
-                alt="Preview"
-                className="w-[200px] h-[115px] object-cover rounded border"
-              />
+              <img src={previewUrl} alt="Preview" className="w-[200px] h-[115px] object-cover rounded border" />
             </label>
             <div className="flex items-center gap-4 mt-2 text-sm">
               <label htmlFor="thumbnail-upload" className="text-blue-600 underline cursor-pointer">
@@ -173,11 +174,10 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
                 type="button"
                 className="text-red-600 underline"
                 onClick={() => {
+                  setPreviewUrl(null);
+                  setThumbnailFile(null);
                   const input = document.getElementById("thumbnail-upload") as HTMLInputElement;
                   if (input) input.value = "";
-                  setPreviewUrl(null);
-                  const dataTransfer = new DataTransfer();
-                  setValue("thumbnail", dataTransfer.files);
                 }}
               >
                 Delete
@@ -211,7 +211,7 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
       </div>
 
       {/* Content */}
-      <div className="w-full h-full rounded-xl border-1px border-slate-200 shadow-sm bg-gray-50">
+      <div className="w-full h-full rounded-xl border border-slate-200 shadow-sm bg-gray-50">
         <div className="flex items-center space-x-2 mb-2 text-gray-600 border-b border-slate-200 bg-white p-2">
           <Undo className="w-5 h-5 cursor-pointer" />
           <Redo className="w-5 h-5 cursor-pointer" />
