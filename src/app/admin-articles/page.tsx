@@ -8,15 +8,13 @@ import AdminSidebar from "@/components/adminsidebar";
 import Pagination from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import { Search, Plus } from "lucide-react";
-import Link from "node_modules/next/link";
+import Link from "next/link"; // 🔧 sudah betul, `node_modules/next/link` tidak diperlukan
 
-type Category = {
-  id: string;
-  name: string;
-};
+// 🔧 Ganti dengan import dari types.ts
+import { Article, Category } from "@/types";
 
 export default function AdminArticles() {
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [search, setSearch] = useState("");
@@ -38,7 +36,7 @@ export default function AdminArticles() {
       const res = await fetch(`https://test-fe.mysellerpintar.com/api/articles?${query}`);
       const json = await res.json();
 
-      setArticles(json.data || []);
+      setArticles(json.data as Article[]);
       setTotalPages(json.totalPages || 1);
     } catch (error) {
       console.error("Failed to fetch articles:", error);

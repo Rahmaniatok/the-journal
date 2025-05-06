@@ -4,19 +4,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { DeleteArticleDialog } from "./deletearticledialog";
 import { getProfile } from "@/lib/auth";
+import { Article } from "@/types"; // ⬅️ Import dari type.ts
 
-interface Article {
-  id: string;
-  title: string;
-  imageUrl: string;
-  category: {
-    name: string;
-  };
-  createdAt: string;
-}
+// Kita hanya butuh sebagian field dari Article
+type ArticleTableItem = Pick<Article, "id" | "title" | "imageUrl" | "createdAt"> & {
+  category: { name: string };
+};
 
 export default function ArticleTable() {
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState<ArticleTableItem[]>([]);
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -86,13 +82,10 @@ export default function ArticleTable() {
                 <Link href={`/edit-articles/${article.id}`} className="text-sm underline text-blue-600 px-2">
                   Edit
                 </Link >
-                  <DeleteArticleDialog
-                    articleId={article.id}
-                    onSuccess={() => {
-                      // misalnya reload ulang data artikel
-                      window.location.reload();
-                    }}
-                  />
+                <DeleteArticleDialog
+                  articleId={article.id}
+                  onSuccess={() => window.location.reload()}
+                />
               </td>
             </tr>
           ))}

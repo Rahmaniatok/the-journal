@@ -7,13 +7,15 @@ import AdminSidebar from "@/components/adminsidebar";
 import CategoryTable from "@/components/categorytable";
 import Pagination from "@/components/pagination";
 import { Search } from "lucide-react";
+import { Category } from "@/types"; // ✅ Gunakan dari type.ts
 
 export default function AdminCategory() {
-  const [categories, setCategories] = useState([]);
-  const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalData, setTotalData] = useState(0);
+  // ✅ Typing kategori secara eksplisit
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [search, setSearch] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalData, setTotalData] = useState<number>(0);
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
 
   // ✅ Fetch all categories from API
@@ -34,7 +36,7 @@ export default function AdminCategory() {
       });
 
       const json = await res.json();
-      setCategories(json.data || []);
+      setCategories(json.data as Category[] || []);
       setTotalPages(json.totalPages || 1);
       setTotalData(json.totalData || 0);
     } catch (error) {
@@ -42,7 +44,6 @@ export default function AdminCategory() {
     }
   };
 
-  // ✅ Search with debounce
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearch(value);
@@ -57,7 +58,6 @@ export default function AdminCategory() {
     setDebounceTimeout(timeout);
   };
 
-  // ✅ Initial fetch + re-fetch on page change
   useEffect(() => {
     fetchCategories(search, currentPage);
   }, [currentPage]);
