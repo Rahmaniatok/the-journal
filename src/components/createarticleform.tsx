@@ -42,7 +42,7 @@ interface CreateArticleFormProps {
 
 export default function CreateArticleForm({ mode = 'create', defaultValues }: CreateArticleFormProps) {
   const router = useRouter();
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<ArticleFormData>({
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues
       ? {
