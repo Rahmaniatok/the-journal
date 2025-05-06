@@ -8,7 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ImagePlus, Bold, Italic, Image, AlignLeft, AlignCenter, AlignRight, AlignJustify, Undo, Redo } from "lucide-react";
+import {
+  ImagePlus, Bold, Italic, Image,
+  AlignLeft, AlignCenter, AlignRight, AlignJustify,
+  Undo, Redo
+} from "lucide-react";
 
 type ArticleFormData = {
   thumbnail: FileList;
@@ -23,7 +27,6 @@ type Category = {
 };
 
 const schema = z.object({
-  thumbnail?: FileList;
   title: z.string().min(1, "Please enter title"),
   category: z.string().min(1, "Please select category"),
   content: z.string().min(1, "Content field cannot be empty"),
@@ -55,7 +58,7 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(defaultValues?.imageUrl || null);
-  
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -66,7 +69,6 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
         console.error("Failed to fetch categories", error);
       }
     };
-
     fetchCategories();
   }, []);
 
@@ -75,13 +77,20 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
     try {
       const token = localStorage.getItem("token");
 
-      // Upload thumbnail
+      // Upload thumbnail (optional)
       if (data.thumbnail && data.thumbnail[0]) {
         const formData = new FormData();
         formData.append("image", data.thumbnail[0]);
+
+        await fetch("https://test-fe.mysellerpintar.com/api/upload", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
       }
 
-      // Submit article
       const payload = {
         title: data.title,
         content: data.content,
@@ -110,7 +119,7 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
       }
 
       alert(`Article ${mode === 'edit' ? 'updated' : 'created'} successfully!`);
-      router.push("/admin-articles"); // ✅ Redirect ke sini
+      router.push("/admin-articles");
     } catch (error) {
       console.error("Submission error", error);
       alert("Something went wrong. Please try again.");
@@ -121,72 +130,62 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mx-auto">
-  {/* Thumbnail */}
-  <label className="block mb-2 font-medium text-slate-900">Thumbnails</label>
-    <div className="w-fit min-h-[163px] border-dashed border-[1px] border-slate-300 flex flex-col items-center justify-center text-slate-500 rounded-lg p-[12px] gap-[8px]">
-      
-      <input
-        type="file"
-        accept="image/png, image/jpeg"
-        id="thumbnail-upload"
-        className="hidden"
-        onChange={(e) => {
-          const files = e.target.files;
-          if (files && files.length > 0) {
-            setValue("thumbnail", files, { shouldValidate: true });
-            const file = files[0];
-            const url = URL.createObjectURL(file);
-            setPreviewUrl(url);
-          }
-        }}
-      />
-
-      {!previewUrl ? (
-        <label htmlFor="thumbnail-upload" className="text-center text-xs cursor-pointer">
-          <div className="flex flex-col items-center">
-            <ImagePlus className="w-[20px] h-[20px] mx-auto mb-2" />
-            <p className="underline">Click to select files</p>
-            <p>Support File Type : jpg or png</p>
-          </div>
-        </label>
-      ) : (
-        <div className="flex flex-col items-center">
-          <label htmlFor="thumbnail-upload" className="cursor-pointer">
-            <img
-              src={previewUrl}
-              alt="Preview"
-              className="w-[200px] h-[115px] object-cover rounded border"
-            />
+      {/* Thumbnail */}
+      <label className="block mb-2 font-medium text-slate-900">Thumbnails</label>
+      <div className="w-fit min-h-[163px] border-dashed border-[1px] border-slate-300 flex flex-col items-center justify-center text-slate-500 rounded-lg p-[12px] gap-[8px]">
+        <input
+          type="file"
+          accept="image/png, image/jpeg"
+          id="thumbnail-upload"
+          className="hidden"
+          onChange={(e) => {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+              setValue("thumbnail", files);
+              const file = files[0];
+              const url = URL.createObjectURL(file);
+              setPreviewUrl(url);
+            }
+          }}
+        />
+        {!previewUrl ? (
+          <label htmlFor="thumbnail-upload" className="text-center text-xs cursor-pointer">
+            <div className="flex flex-col items-center">
+              <ImagePlus className="w-[20px] h-[20px] mx-auto mb-2" />
+              <p className="underline">Click to select files</p>
+              <p>Support File Type : jpg or png</p>
+            </div>
           </label>
-          <div className="flex items-center gap-4 mt-2 text-sm">
-            <label htmlFor="thumbnail-upload" className="text-blue-600 underline cursor-pointer">
-              Change
+        ) : (
+          <div className="flex flex-col items-center">
+            <label htmlFor="thumbnail-upload" className="cursor-pointer">
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="w-[200px] h-[115px] object-cover rounded border"
+              />
             </label>
+            <div className="flex items-center gap-4 mt-2 text-sm">
+              <label htmlFor="thumbnail-upload" className="text-blue-600 underline cursor-pointer">
+                Change
+              </label>
               <button
                 type="button"
                 className="text-red-600 underline"
                 onClick={() => {
                   const input = document.getElementById("thumbnail-upload") as HTMLInputElement;
-                  const fileList = input?.files;
-
                   if (input) input.value = "";
                   setPreviewUrl(null);
-
-                  const dataTransfer = new DataTransfer(); // FileList kosong
-                  setValue("thumbnail", dataTransfer.files, { shouldValidate: true });
+                  const dataTransfer = new DataTransfer();
+                  setValue("thumbnail", dataTransfer.files);
                 }}
               >
-              Delete
-            </button>
+                Delete
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
-
-    {errors.thumbnail && (
-      <p className="text-sm text-red-500 mt-1">{errors.thumbnail.message as string}</p>
-    )}
-
+        )}
+      </div>
 
       {/* Title */}
       <div>
@@ -239,33 +238,18 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
 
       {/* Actions */}
       <div className="flex justify-end space-x-4">
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => router.push("/admin-articles")}
-      >
-        Cancel
-      </Button>
         <Button
           type="button"
-          variant="secondary"
-          onClick={async () => {
-            const values = {
-              title: (document.querySelector("input[name='title']") as HTMLInputElement)?.value || "",
-              content,
-              category: (document.querySelector("select[name='category']") as HTMLSelectElement)?.value || "",
-              imageUrl: previewUrl,
-              createdAt: new Date().toISOString(),
-              username: "You", // ganti sesuai data login jika ada
-            };
-
-            localStorage.setItem("previewArticle", JSON.stringify(values));
-            router.push("/previewarticle");
-          }}
+          variant="outline"
+          onClick={() => router.push("/admin-articles")}
         >
-          Preview
+          Cancel
         </Button>
-        <Button type="submit" className="bg-blue-600 text-white" disabled={loading}>
+        <Button
+          type="submit"
+          className="bg-blue-600 text-white"
+          disabled={loading}
+        >
           {loading ? (mode === 'edit' ? "Updating..." : "Uploading...") : (mode === 'edit' ? "Update" : "Upload")}
         </Button>
       </div>
