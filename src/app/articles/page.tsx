@@ -224,7 +224,7 @@ export default function Articles() {
                     key={article.id}
                     id={article.id}
                     title={article.title}
-                    image={article.imageUrl}
+                    imageUrl={article.imageUrl}
                     content={article.content}
                     createdAt={article.createdAt}
                     category={article.category?.name || "Uncategorized"}

@@ -89,7 +89,7 @@ export default async function DetailArticlePage({ params }: { params: Params }) 
                     key={item.id}
                     id={item.id}
                     title={item.title}
-                    image={item.imageUrl}
+                    imageUrl={item.imageUrl}
                     content={item.content}
                     createdAt={new Date(item.createdAt).toLocaleDateString("en-US", {
                       year: "numeric",

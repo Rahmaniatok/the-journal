@@ -23,11 +23,11 @@ type Category = {
 };
 
 const schema = z.object({
-  thumbnail: z
-    .any()
-    .refine((fileList) => fileList instanceof FileList && fileList.length > 0, {
-      message: "Please upload a picture",
-    }),
+  z.custom<FileList>((val: unknown): val is FileList => {
+    return val instanceof FileList && val.length > 0;
+  }, {
+    message: "Please upload a picture",
+  }),
   title: z.string().min(1, "Please enter title"),
   category: z.string().min(1, "Please select category"),
   content: z.string().min(1, "Content field cannot be empty"),
