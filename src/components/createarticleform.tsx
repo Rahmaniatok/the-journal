@@ -23,7 +23,7 @@ type Category = {
 };
 
 const schema = z.object({
-  z.custom<FileList>((val: unknown): val is FileList => {
+  thumbnail: z.custom<FileList>((val: unknown): val is FileList => {
     return val instanceof FileList && val.length > 0;
   }, {
     message: "Please upload a picture",
