@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { ControllerRenderProps } from "react-hook-form";
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@/components/ui/input"
@@ -46,6 +47,8 @@ const schema = z.object({
   category: z.string().optional(),
   search: z.string().optional(),
 })
+
+type FormSchema = z.infer<typeof schema>;
 
 export default function Articles() {
   const [articles, setArticles] = useState<Article[]>([])
@@ -160,9 +163,9 @@ export default function Articles() {
                   <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col md:flex-row space-y-4 md:space-x-4 w-full">
                     {/* Select Category */}
                     <FormField
-                      control={form.control}
-                      name="category"
-                      render={({ field }) => (
+                        control={form.control}
+                        name="category"
+                        render={({ field }: { field: ControllerRenderProps<FormSchema, "category"> }) => (
                         <FormItem className="w-full md:w-1/3">
                           <Select onValueChange={handleCategoryChange} defaultValue={field.value}>
                             <FormControl>
@@ -185,7 +188,7 @@ export default function Articles() {
                     <FormField
                       control={form.control}
                       name="search"
-                      render={({ field }) => (
+                      render={({ field }: { field: ControllerRenderProps<FormSchema, "search"> }) => (
                         <FormItem className="w-full md:w-2/3">
                           <FormControl>
                             <div className="relative">

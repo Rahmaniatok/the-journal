@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { ControllerRenderProps } from "react-hook-form";
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -34,12 +35,18 @@ const schema = z.object({
   }),
 })
 
+type FieldProps<Name extends keyof RegisterForm> = {
+  field: ControllerRenderProps<RegisterForm, Name>;
+};
+
+type RegisterForm = z.infer<typeof schema>;
+
 export default function Register() {
   const router = useRouter(); 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const form = useForm({
+  const form = useForm<RegisterForm>({
     resolver: zodResolver(schema),
     defaultValues: {
       username: "",
@@ -48,7 +55,7 @@ export default function Register() {
     },
   });
 
-  async function onSubmit(values) {
+  async function onSubmit(values: RegisterForm) {
     setLoading(true);
     try {
       // 1. Kirim request register
@@ -131,7 +138,7 @@ export default function Register() {
             <FormField
               control={form.control}
               name="username"
-              render={({ field }) => (
+              render={({ field }: FieldProps<"username">) => (
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
@@ -145,7 +152,7 @@ export default function Register() {
             <FormField
               control={form.control}
               name="password"
-              render={({ field }) => (
+              render={({ field }: FieldProps<"password">) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <div className="relative">
@@ -172,7 +179,7 @@ export default function Register() {
             <FormField
               control={form.control}
               name="role"
-              render={({ field }) => (
+              render={({ field }: FieldProps<"role">) => (
                 <FormItem>
                   <FormLabel>Role</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>

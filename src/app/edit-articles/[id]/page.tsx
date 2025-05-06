@@ -10,7 +10,13 @@ import { useParams } from "next/navigation";
 
 export default function EditArticlePage() {
   const { id } = useParams(); // Ambil [id] dari URL
-  const [articleData, setArticleData] = useState(null);
+  const [articleData, setArticleData] = useState<{
+    id?: string;
+    title: string;
+    content: string;
+    categoryId: string;
+    imageUrl?: string;
+  } | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

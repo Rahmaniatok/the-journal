@@ -1,41 +1,19 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { DeleteArticleDialog } from "./deletearticledialog";
-import { getProfile } from "@/lib/auth";
-import { Article } from "@/types"; // ⬅️ Import dari type.ts
+import { Article } from "@/types";
 
-// Kita hanya butuh sebagian field dari Article
+// Definisikan tipe props (hanya field yang diperlukan)
 type ArticleTableItem = Pick<Article, "id" | "title" | "imageUrl" | "createdAt"> & {
   category: { name: string };
 };
 
-export default function ArticleTable() {
-  const [articles, setArticles] = useState<ArticleTableItem[]>([]);
+type Props = {
+  data: ArticleTableItem[];
+};
 
-  useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-
-        const profile = await getProfile(token);
-        if (!profile?.id) return;
-
-        const query = new URLSearchParams({ userId: profile.id, limit: "10", page: "1" }).toString();
-        const res = await fetch(`https://test-fe.mysellerpintar.com/api/articles?${query}`);
-        const json = await res.json();
-
-        setArticles(json.data || []);
-      } catch (err) {
-        console.error("Failed to fetch articles", err);
-      }
-    };
-
-    fetchArticles();
-  }, []);
-
+export default function ArticleTable({ data }: Props) {
   return (
     <div className="bg-white overflow-x-auto">
       <table className="min-w-full text-sm text-center text-slate-900">
@@ -49,7 +27,7 @@ export default function ArticleTable() {
           </tr>
         </thead>
         <tbody>
-          {articles.map((article) => (
+          {data.map((article) => (
             <tr key={article.id} className="border-b border-slate-200 bg-gray-50">
               <td className="px-[16px] py-[12px] flex justify-center items-center">
                 <img

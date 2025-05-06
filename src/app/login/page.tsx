@@ -6,6 +6,7 @@ import axios from "axios"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { ControllerRenderProps } from "react-hook-form";
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -25,6 +26,9 @@ const schema = z.object({
   password: z.string().min(1, "Please enter your password"),
 })
 
+type SignInForm = z.infer<typeof schema>;
+
+
 export default function SignIn() {
   const router = useRouter(); // ⬅️ tambahkan ini
   const [showPassword, setShowPassword] = useState(false);
@@ -38,7 +42,7 @@ export default function SignIn() {
     },
   })
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: SignInForm) => {
     try {
       setLoading(true);
       const response = await axios.post("https://test-fe.mysellerpintar.com/api/auth/login", {
@@ -80,7 +84,7 @@ export default function SignIn() {
             <FormField
               control={form.control}
               name="username"
-              render={({ field }) => (
+              render={({ field }: { field: ControllerRenderProps<SignInForm, "username"> }) => (
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
@@ -94,7 +98,7 @@ export default function SignIn() {
             <FormField
               control={form.control}
               name="password"
-              render={({ field }) => (
+              render={({ field }: { field: ControllerRenderProps<SignInForm, "password"> }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <div className="relative">
