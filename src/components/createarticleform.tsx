@@ -171,7 +171,7 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
               className="text-red-600 underline"
               onClick={() => {
                 setPreviewUrl(null);
-                setValue("thumbnail", null, { shouldValidate: true });
+                setValue("thumbnail", undefined, { shouldValidate: true });
                 // Clear file input
                 const input = document.getElementById("thumbnail-upload") as HTMLInputElement;
                 if (input) input.value = "";
