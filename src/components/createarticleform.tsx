@@ -23,11 +23,7 @@ type Category = {
 };
 
 const schema = z.object({
-  thumbnail: z.custom<FileList>((val: unknown): val is FileList => {
-    return val instanceof FileList && val.length > 0;
-  }, {
-    message: "Please upload a picture",
-  }),
+  thumbnail?: FileList;
   title: z.string().min(1, "Please enter title"),
   category: z.string().min(1, "Please select category"),
   content: z.string().min(1, "Content field cannot be empty"),
@@ -166,17 +162,20 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
             <label htmlFor="thumbnail-upload" className="text-blue-600 underline cursor-pointer">
               Change
             </label>
-            <button
-              type="button"
-              className="text-red-600 underline"
-              onClick={() => {
-                setPreviewUrl(null);
-                setValue("thumbnail", undefined, { shouldValidate: true });
-                // Clear file input
-                const input = document.getElementById("thumbnail-upload") as HTMLInputElement;
-                if (input) input.value = "";
-              }}
-            >
+              <button
+                type="button"
+                className="text-red-600 underline"
+                onClick={() => {
+                  const input = document.getElementById("thumbnail-upload") as HTMLInputElement;
+                  const fileList = input?.files;
+
+                  if (input) input.value = "";
+                  setPreviewUrl(null);
+
+                  const dataTransfer = new DataTransfer(); // FileList kosong
+                  setValue("thumbnail", dataTransfer.files, { shouldValidate: true });
+                }}
+              >
               Delete
             </button>
           </div>
