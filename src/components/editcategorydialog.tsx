@@ -57,7 +57,7 @@ export function EditCategoryDialog({
 
       setOpen(false);
       setError("");
-      onSuccess(); // notify parent to refetch
+      onSuccess(); 
     } catch (err) {
       console.error("Error updating category:", err);
       alert("Something went wrong");

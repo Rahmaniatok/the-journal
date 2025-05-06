@@ -42,7 +42,6 @@ function Navbar() {
       <div className="absolute top-0 w-full z-10">
         <div className="flex justify-between items-center px-4 md:px-[60px] py-4 md:py-[32px] bg-white md:bg-transparent">
           
-          {/* Logo: hanya muncul satu tergantung ukuran layar */}
           <img
             src="logoipsum.png"
             alt="Logo Mobile"
@@ -65,7 +64,7 @@ function Navbar() {
                 {username ? username.charAt(0) : "?"}
               </div>
 
-              {/* Username - hanya tampil di desktop */}
+              {/* Username */}
               <div className="hidden md:block text-white text-base px-2">
                 {username || "Loading..."}
               </div>

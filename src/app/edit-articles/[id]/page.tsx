@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 export default function EditArticlePage() {
-  const { id } = useParams(); // Ambil [id] dari URL
+  const { id } = useParams(); 
   const [articleData, setArticleData] = useState<{
     id?: string;
     title: string;
@@ -37,7 +37,7 @@ export default function EditArticlePage() {
         setArticleData(data);
       } catch (error) {
         console.error(error);
-        notFound(); // redirect to 404 if needed
+        notFound(); 
       } finally {
         setLoading(false);
       }
@@ -59,7 +59,6 @@ export default function EditArticlePage() {
               <ArrowLeft className="w-[20px] h-[20px]" />
               <p className="text-base text-slate-900">Edit Article</p>
             </div>
-            {/* Kirim data default ke form */}
             <CreateArticleForm mode="edit" defaultValues={articleData} />
           </div>
         </div>

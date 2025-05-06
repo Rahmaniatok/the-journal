@@ -52,7 +52,7 @@ export function AddCategoryDialog({ onAdd }: { onAdd: () => void }) {
       setCategory("");
       setError("");
       setOpen(false);
-      onAdd(); // trigger fetch ulang dari parent
+      onAdd(); 
     } catch (err) {
       console.error("Error adding category", err);
       alert("Something went wrong");
@@ -86,7 +86,7 @@ export function AddCategoryDialog({ onAdd }: { onAdd: () => void }) {
               value={category}
               onChange={(e) => {
                 setCategory(e.target.value);
-                if (error) setError(""); // reset error saat user mengetik
+                if (error) setError(""); 
               }}
               className="col-span-3"
             />

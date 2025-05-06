@@ -4,7 +4,6 @@ import Link from "next/link";
 import { DeleteArticleDialog } from "./deletearticledialog";
 import { Article } from "@/types";
 
-// Definisikan tipe props (hanya field yang diperlukan)
 type ArticleTableItem = Pick<Article, "id" | "title" | "imageUrl" | "createdAt"> & {
   category: { name: string };
 };

@@ -58,7 +58,6 @@ export default function Register() {
   async function onSubmit(values: RegisterForm) {
     setLoading(true);
     try {
-      // 1. Kirim request register
       const response = await fetch("https://test-fe.mysellerpintar.com/api/auth/register", {
         method: "POST",
         headers: {
@@ -79,7 +78,6 @@ export default function Register() {
         return;
       }
   
-      // 2. Lanjut login otomatis
       const loginResponse = await fetch("https://test-fe.mysellerpintar.com/api/auth/login", {
         method: "POST",
         headers: {
@@ -100,11 +98,9 @@ export default function Register() {
         return;
       }
   
-      // 3. Simpan token
       localStorage.setItem("token", loginData.token);
-      localStorage.setItem("user_password", values.password); // kalau mau ditampilkan di /userprofile
+      localStorage.setItem("user_password", values.password); 
 
-      // 4. Fetch profile secara manual
       const profileRes = await fetch("https://test-fe.mysellerpintar.com/api/auth/profile", {
         headers: {
           Authorization: `Bearer ${loginData.token}`,
@@ -112,7 +108,6 @@ export default function Register() {
       });
       const profile = await profileRes.json();
 
-      // 5. Redirect berdasarkan role
       if (profile.role === "User") {
         router.push("/articles");
       } else if (profile.role === "Admin") {

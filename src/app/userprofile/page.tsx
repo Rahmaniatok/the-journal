@@ -42,7 +42,6 @@ export default function UserProfilePage() {
     <>
       <DarkNavbar />
       <div className="min-h-screen flex flex-col">
-        {/* Konten utama (flex-1 untuk mengisi sisa tinggi layar) */}
         <div className="flex-1 w-full flex items-center justify-center">
           <div className="md:max-w-[400px] w-full rounded-xl py-[24px] px-[16px] gap-[36px] flex flex-col justify-center">
             <h1 className="text-xl font-semibold text-slate-900 text-center">
@@ -72,7 +71,6 @@ export default function UserProfilePage() {
             </Button>
           </div>
         </div>
-        {/* Footer selalu di bawah */}
         <Footer />
       </div>
     </>

@@ -8,9 +8,7 @@ import AdminSidebar from "@/components/adminsidebar";
 import Pagination from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import { Search, Plus } from "lucide-react";
-import Link from "next/link"; // 🔧 sudah betul, `node_modules/next/link` tidak diperlukan
-
-// 🔧 Ganti dengan import dari types.ts
+import Link from "next/link"; 
 import { Article, Category } from "@/types";
 
 export default function AdminArticles() {

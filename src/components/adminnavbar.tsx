@@ -14,7 +14,6 @@ function AdminNavbar() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Tentukan judul berdasarkan path
   const getTitle = () => {
     if (["/admin-articles", "/create-articles", "/edit-articles"].some(path => pathname.startsWith(path))) {
       return "Articles";

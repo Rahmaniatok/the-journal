@@ -76,7 +76,6 @@ function DarkNavbar() {
         </div>
       </div>
 
-      {/* AlertDialog tetap ada di DOM */}
       <LogoutDialog
         open={showLogoutDialog}
         onOpenChange={setShowLogoutDialog}

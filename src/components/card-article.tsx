@@ -8,7 +8,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
-import { Article } from "@/types"; // pastikan path ini sesuai
+import { Article } from "@/types"; 
 
 type ArticleCardProps = Pick<Article, "id" | "title" | "content" | "imageUrl" | "createdAt"> & {
   category: string;

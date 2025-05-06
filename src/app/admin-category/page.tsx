@@ -7,10 +7,9 @@ import AdminSidebar from "@/components/adminsidebar";
 import CategoryTable from "@/components/categorytable";
 import Pagination from "@/components/pagination";
 import { Search } from "lucide-react";
-import { Category } from "@/types"; // ✅ Gunakan dari type.ts
+import { Category } from "@/types";
 
 export default function AdminCategory() {
-  // ✅ Typing kategori secara eksplisit
   const [categories, setCategories] = useState<Category[]>([]);
   const [search, setSearch] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -18,7 +17,6 @@ export default function AdminCategory() {
   const [totalData, setTotalData] = useState<number>(0);
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  // ✅ Fetch all categories from API
   const fetchCategories = async (searchTerm = "", page = 1) => {
     try {
       const query = new URLSearchParams({

@@ -45,7 +45,7 @@ export default function CategoryTable({
                 <EditCategoryDialog
                   id={category.id}
                   initialValue={category.name}
-                  onSuccess={onRefresh} // ✅ refresh table
+                  onSuccess={onRefresh} 
                 />
                 <DeleteCategoryDialog
                   id={category.id}
