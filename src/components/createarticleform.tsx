@@ -60,7 +60,6 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
 
   const watchedTitle = watch("title");
   const watchedCategory = watch("category");
-  const watchedContent = watch("content");
 
   const [content, setContent] = useState(defaultValues?.content || "");
   const [loading, setLoading] = useState(false);
