@@ -59,7 +59,9 @@ export default function EditArticlePage() {
               <ArrowLeft className="w-[20px] h-[20px]" />
               <p className="text-base text-slate-900">Edit Article</p>
             </div>
-            <CreateArticleForm mode="edit" defaultValues={articleData} />
+            <div className="w-full overflow-x-auto">
+              <CreateArticleForm mode="edit" defaultValues={articleData} />
+            </div>
           </div>
         </div>
       </div>

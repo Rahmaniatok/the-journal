@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 
 export default function AdminArticles() {
     return (
-        <div className="flex h-screen overflow-hidden">
+        <div className="flex h-screen">
             <AdminSidebar />
             <div className="flex-1 bg-white flex flex-col">
                 <AdminNavbar />
@@ -15,7 +15,9 @@ export default function AdminArticles() {
                             <ArrowLeft className="w-[20px] h-[20px]"/>
                             <p className="text-base text-slate-900">Create Articles</p>
                         </div>
-                        <CreateArticleForm />
+                        <div className="w-full overflow-x-auto">
+                            <CreateArticleForm />
+                        </div>
                     </div>
                 </div>
             </div>

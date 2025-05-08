@@ -14,7 +14,7 @@ type Props = {
 
 export default function ArticleTable({ data }: Props) {
   return (
-    <div className="bg-white overflow-x-auto">
+    <div className="bg-white overflow-x-auto w-full">
       <table className="min-w-full text-sm text-center text-slate-900">
         <thead className="bg-gray-100 border-b-[1px] border-slate-200">
           <tr>
