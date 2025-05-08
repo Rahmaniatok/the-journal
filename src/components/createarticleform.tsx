@@ -42,7 +42,12 @@ interface CreateArticleFormProps {
 
 export default function CreateArticleForm({ mode = 'create', defaultValues }: CreateArticleFormProps) {
   const router = useRouter();
-  const { register, handleSubmit, formState: { errors } } = useForm<z.infer<typeof schema>>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues
       ? {
@@ -52,6 +57,10 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
         }
       : {},
   });
+
+  const watchedTitle = watch("title");
+  const watchedCategory = watch("category");
+  const watchedContent = watch("content");
 
   const [content, setContent] = useState(defaultValues?.content || "");
   const [loading, setLoading] = useState(false);
@@ -79,7 +88,6 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
       const token = localStorage.getItem("token");
       let imageUrl = previewUrl;
 
-      // Upload image jika ada thumbnail baru
       if (thumbnailFile) {
         const formData = new FormData();
         formData.append("image", thumbnailFile);
@@ -133,6 +141,25 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
       setLoading(false);
     }
   };
+  
+  const handlePreview = () => {
+    const selectedCategory = categories.find((cat) => cat.id === watchedCategory);
+
+    const previewData = {
+      title: watchedTitle,
+      content: content,
+      imageUrl: previewUrl,
+      createdAt: new Date().toISOString(),
+      username: "Preview Author",
+      category: {
+        id: selectedCategory?.id || "",
+        name: selectedCategory?.name || "Uncategorized",
+      },
+    };
+  
+    localStorage.setItem("previewArticle", JSON.stringify(previewData));
+    router.push("/previewarticle");
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mx-auto">
@@ -167,9 +194,7 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
               <img src={previewUrl} alt="Preview" className="w-[200px] h-[115px] object-cover rounded border" />
             </label>
             <div className="flex items-center gap-4 mt-2 text-sm">
-              <label htmlFor="thumbnail-upload" className="text-blue-600 underline cursor-pointer">
-                Change
-              </label>
+              <label htmlFor="thumbnail-upload" className="text-blue-600 underline cursor-pointer">Change</label>
               <button
                 type="button"
                 className="text-red-600 underline"
@@ -244,6 +269,13 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
           onClick={() => router.push("/admin-articles")}
         >
           Cancel
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={handlePreview}
+        >
+          Preview
         </Button>
         <Button
           type="submit"
