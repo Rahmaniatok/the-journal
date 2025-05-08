@@ -160,7 +160,7 @@ export default function Articles() {
 
               <div className="bg-blue-500 w-full p-2 rounded-md flex justify-between">
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col md:flex-row space-y-4 md:space-x-4 w-full">
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full">
                     {/* Select Category */}
                     <FormField
                         control={form.control}

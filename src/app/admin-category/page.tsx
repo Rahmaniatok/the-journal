@@ -61,7 +61,7 @@ export default function AdminCategory() {
   }, [currentPage]);
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen">
       <AdminSidebar />
       <div className="flex-1 bg-white flex flex-col">
         <AdminNavbar />
@@ -70,9 +70,10 @@ export default function AdminCategory() {
             <header className="w-full border-b-[1px] p-[24px] border-slate-200 bg-gray-50">
               <p className="text-base text-slate-800">Total Category : {totalData}</p>
             </header>
-            <header className="w-full p-[24px] border-t-[1px] border-slate-200 bg-gray-50 flex justify-between">
-              <div className="flex gap-[8px]">
-                <form className="flex w-[240px] rounded-md border-[1px] px-[12px] py-[8px] gap-[6px] border-slate-300">
+            <header className="w-full p-4 md:p-[24px] border-t-[1px] border-slate-200 bg-gray-50">
+              <div className="flex flex-col md:flex-row md:justify-between gap-4 md:items-center">
+                {/* Search */}
+                <form className="flex w-full md:w-[240px] rounded-md border-[1px] px-[12px] py-[8px] gap-[6px] border-slate-300">
                   <Search className="w-[20px] h-[20px]" />
                   <input
                     type="text"
@@ -82,11 +83,17 @@ export default function AdminCategory() {
                     onChange={handleSearchChange}
                   />
                 </form>
+
+                {/* Add Category Button */}
+                <div className="w-full md:w-fit">
+                  <AddCategoryDialog onAdd={() => fetchCategories(search, currentPage)} />
+                </div>
               </div>
-              <AddCategoryDialog onAdd={() => fetchCategories(search, currentPage)} />
             </header>
           </div>
-          <CategoryTable data={categories} onRefresh={() => fetchCategories(search, currentPage)} />
+          <div className="w-full overflow-x-auto">
+            <CategoryTable data={categories} onRefresh={() => fetchCategories(search, currentPage)} />
+          </div>
           <div className="w-full h-fit px-[16px] py-[12px]">
             <Pagination
               currentPage={currentPage}

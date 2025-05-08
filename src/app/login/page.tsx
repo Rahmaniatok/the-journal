@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -41,6 +41,22 @@ export default function SignIn() {
       password: "",
     },
   })
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+  
+      const profile = await getProfile(token);
+      if (profile?.role === "User") {
+        router.replace("/articles");
+      } else if (profile?.role === "Admin") {
+        router.replace("/admin-articles");
+      }
+    };
+  
+    checkLogin();
+  }, []);
 
   const onSubmit = async (values: SignInForm) => {
     try {

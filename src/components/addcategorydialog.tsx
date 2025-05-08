@@ -64,7 +64,7 @@ export function AddCategoryDialog({ onAdd }: { onAdd: () => void }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-600 text-white w-fit">
+        <Button className="bg-blue-600 text-white w-full md:w-fit">
           <Plus className="w-[20px] h-[20px]" />
           <p className="text-sm ml-2">Add Category</p>
         </Button>
