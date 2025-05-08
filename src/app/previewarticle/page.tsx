@@ -11,7 +11,10 @@ interface PreviewArticle {
   content: string;
   imageUrl?: string;
   createdAt: string;
-  category?: string;
+  category?: {
+    id: string;
+    name: string;
+  };
 }
 
 interface RelatedArticle {
