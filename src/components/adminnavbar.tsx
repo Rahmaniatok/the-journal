@@ -53,7 +53,7 @@ function AdminNavbar() {
   return (
     <div className="w-full z-10">
       <div className="flex justify-between items-center px-[60px] py-[32px]">
-        <h1 className="text-xl text-slate-900 font-semibold">{getTitle()}</h1>
+        <h1 className="hidden mb:block text-xl text-slate-900 font-semibold">{getTitle()}</h1>
 
         <div className="flex flex-row items-center relative" ref={dropdownRef}>
           <div

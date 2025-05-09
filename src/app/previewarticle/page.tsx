@@ -96,7 +96,7 @@ export default function PreviewArticlePage() {
       <DarkNavbar />
       <div className="min-h-screen flex flex-col">
         <main className="flex-1 bg-white w-full pt-[100px]">
-          <article className="flex flex-col justify-center mx-[160px]">
+          <article className="flex flex-col justify-center mx-[20px] md:mx-[160px]">
             <div className="flex flex-col justify-center">
               <div className="w-full h-fit">
                 <div className="flex items-center justify-center gap-2 text-sm text-slate-600">

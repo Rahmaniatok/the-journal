@@ -161,10 +161,14 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mx-auto">
-      {/* Thumbnail */}
+    <form
+    onSubmit={handleSubmit(onSubmit)}
+    className="space-y-6 px-4 sm:px-6 max-w-[800px] w-full mx-auto"
+  >
+    {/* Thumbnail */}
+    <div>
       <label className="block mb-2 font-medium text-slate-900">Thumbnails</label>
-      <div className="w-fit min-h-[163px] border-dashed border-[1px] border-slate-300 flex flex-col items-center justify-center text-slate-500 rounded-lg p-[12px] gap-[8px]">
+      <div className="w-full min-h-[163px] border-dashed border-[1px] border-slate-300 flex flex-col items-center justify-center text-slate-500 rounded-lg p-4 gap-2">
         <input
           type="file"
           accept="image/png, image/jpeg"
@@ -182,7 +186,7 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
         {!previewUrl ? (
           <label htmlFor="thumbnail-upload" className="text-center text-xs cursor-pointer">
             <div className="flex flex-col items-center">
-              <ImagePlus className="w-[20px] h-[20px] mx-auto mb-2" />
+              <ImagePlus className="w-5 h-5 mx-auto mb-2" />
               <p className="underline">Click to select files</p>
               <p>Support File Type : jpg or png</p>
             </div>
@@ -190,7 +194,7 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
         ) : (
           <div className="flex flex-col items-center">
             <label htmlFor="thumbnail-upload" className="cursor-pointer">
-              <img src={previewUrl} alt="Preview" className="w-[200px] h-[115px] object-cover rounded border" />
+              <img src={previewUrl} alt="Preview" className="w-full max-w-[200px] h-[115px] object-cover rounded border" />
             </label>
             <div className="flex items-center gap-4 mt-2 text-sm">
               <label htmlFor="thumbnail-upload" className="text-blue-600 underline cursor-pointer">Change</label>
@@ -210,80 +214,81 @@ export default function CreateArticleForm({ mode = 'create', defaultValues }: Cr
           </div>
         )}
       </div>
+    </div>
 
-      {/* Title */}
-      <div>
-        <label className="block mb-2 font-medium text-slate-900">Title</label>
-        <Input {...register("title")} placeholder="Input title" />
-        {errors.title && <p className="text-sm text-red-500 mt-1">{errors.title.message}</p>}
-      </div>
+    {/* Title */}
+    <div>
+      <label className="block mb-2 font-medium text-slate-900">Title</label>
+      <Input {...register("title")} placeholder="Input title" />
+      {errors.title && <p className="text-sm text-red-500 mt-1">{errors.title.message}</p>}
+    </div>
 
-      {/* Category */}
-      <div>
-        <label className="block mb-2 font-medium text-slate-900">Category</label>
-        <select
-          {...register("category")}
-          className="w-full border rounded px-3 py-2"
-          defaultValue={defaultValues?.categoryId || ""}
-        >
-          <option value="" disabled>Select category</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>{cat.name}</option>
-          ))}
-        </select>
-        {errors.category && <p className="text-sm text-red-500 mt-1">{errors.category.message}</p>}
-      </div>
+    {/* Category */}
+    <div>
+      <label className="block mb-2 font-medium text-slate-900">Category</label>
+      <select
+        {...register("category")}
+        className="w-full border rounded px-3 py-2"
+        defaultValue={defaultValues?.categoryId || ""}
+      >
+        <option value="" disabled>Select category</option>
+        {categories.map((cat) => (
+          <option key={cat.id} value={cat.id}>{cat.name}</option>
+        ))}
+      </select>
+      {errors.category && <p className="text-sm text-red-500 mt-1">{errors.category.message}</p>}
+    </div>
 
-      {/* Content */}
-      <div className="w-full h-full rounded-xl border border-slate-200 shadow-sm bg-gray-50">
-        <div className="flex items-center space-x-2 mb-2 text-gray-600 border-b border-slate-200 bg-white p-2">
-          <Undo className="w-5 h-5 cursor-pointer" />
-          <Redo className="w-5 h-5 cursor-pointer" />
-          <Bold className="w-5 h-5 cursor-pointer" />
-          <Italic className="w-5 h-5 cursor-pointer" />
-          <Image className="w-fit h-5 cursor-pointer border-x border-slate-300 px-2" />
-          <AlignLeft className="w-5 h-5 cursor-pointer" />
-          <AlignCenter className="w-5 h-5 cursor-pointer" />
-          <AlignRight className="w-5 h-5 cursor-pointer" />
-          <AlignJustify className="w-5 h-5 cursor-pointer" />
-        </div>
-        <Textarea
-          {...register("content")}
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Type a content"
-          className="min-h-[150px] border-none focus:outline-none"
-        />
-        <div className="text-xs text-slate-900 mt-1 px-[16px] py-[24px] gap-[8px]">
-          {content.trim().split(/\s+/).filter(Boolean).length} Words
-        </div>
-        {errors.content && <p className="text-sm text-red-500 mt-1">{errors.content.message}</p>}
+    {/* Content */}
+    <div className="w-full h-full rounded-xl border border-slate-200 shadow-sm bg-gray-50">
+      <div className="flex items-center space-x-2 mb-2 text-gray-600 border-b border-slate-200 bg-white p-2 overflow-x-auto">
+        <Undo className="w-5 h-5 cursor-pointer" />
+        <Redo className="w-5 h-5 cursor-pointer" />
+        <Bold className="w-5 h-5 cursor-pointer" />
+        <Italic className="w-5 h-5 cursor-pointer" />
+        <Image className="w-5 h-5 cursor-pointer border-x border-slate-300 px-2" />
+        <AlignLeft className="w-5 h-5 cursor-pointer" />
+        <AlignCenter className="w-5 h-5 cursor-pointer" />
+        <AlignRight className="w-5 h-5 cursor-pointer" />
+        <AlignJustify className="w-5 h-5 cursor-pointer" />
       </div>
+      <Textarea
+        {...register("content")}
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        placeholder="Type a content"
+        className="min-h-[150px] border-none focus:outline-none"
+      />
+      <div className="text-xs text-slate-900 mt-1 px-4 py-4">
+        {content.trim().split(/\s+/).filter(Boolean).length} Words
+      </div>
+      {errors.content && <p className="text-sm text-red-500 mt-1 px-4">{errors.content.message}</p>}
+    </div>
 
-      {/* Actions */}
-      <div className="flex justify-end space-x-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => router.push("/admin-articles")}
-        >
-          Cancel
-        </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={handlePreview}
-        >
-          Preview
-        </Button>
-        <Button
-          type="submit"
-          className="bg-blue-600 text-white"
-          disabled={loading}
-        >
-          {loading ? (mode === 'edit' ? "Updating..." : "Uploading...") : (mode === 'edit' ? "Update" : "Upload")}
-        </Button>
-      </div>
-    </form>
+    {/* Actions */}
+    <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4">
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => router.push("/admin-articles")}
+      >
+        Cancel
+      </Button>
+      <Button
+        type="button"
+        variant="secondary"
+        onClick={handlePreview}
+      >
+        Preview
+      </Button>
+      <Button
+        type="submit"
+        className="bg-blue-600 text-white"
+        disabled={loading}
+      >
+        {loading ? (mode === 'edit' ? "Updating..." : "Uploading...") : (mode === 'edit' ? "Update" : "Upload")}
+      </Button>
+    </div>
+  </form>
   );
 }

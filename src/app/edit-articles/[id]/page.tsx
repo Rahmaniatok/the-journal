@@ -53,8 +53,8 @@ export default function EditArticlePage() {
       <AdminSidebar />
       <div className="flex-1 bg-white flex flex-col">
         <AdminNavbar />
-        <div className="flex-1 bg-gray-100 overflow-y-auto p-[24px]">
-          <div className="flex-1 bg-gray-50 p-[24px] rounded-xl border-[1px] border-slate-200">
+        <div className="flex-1 bg-gray-100 overflow-y-auto py-4 md:p-6">
+          <div className="w-full max-w-[800px] mx-auto bg-gray-50 py-4 md:p-6 rounded-xl border border-slate-200">
             <div className="w-fit h-fit gap-[8px] flex flex-row items-center pb-[20px]">
               <ArrowLeft className="w-[20px] h-[20px]" />
               <p className="text-base text-slate-900">Edit Article</p>
