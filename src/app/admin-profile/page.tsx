@@ -5,15 +5,11 @@ import AdminSidebar from "@/components/adminsidebar";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-
-interface UserProfile {
-  username: string;
-  role: string;
-}
+import { User } from "@/types";
 
 export default function AdminProfile() {
     const router = useRouter();
-    const [user, setUser] = useState<UserProfile | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [password, setPassword] = useState<string | null>("");
   
     useEffect(() => {

@@ -18,23 +18,8 @@ import Navbar from "@/components/navbar"
 import ArticleCard from "@/components/card-article"
 import Pagination from "@/components/pagination"
 import Footer from "@/components/footer"
+import { Article, Category } from "@/types";
 
-type Article = {
-  id: string;
-  title: string;
-  content: string;
-  imageUrl: string;
-  createdAt: string;
-  category: {
-    id: string;
-    name: string;
-  };
-};
-
-type Category = {
-  id: string;
-  name: string;
-};
 
 type ArticleQueryParams = {
   category?: string;
