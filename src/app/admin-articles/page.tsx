@@ -137,19 +137,23 @@ export default function AdminArticles() {
                 </Link>
               </div>
             </header>
+            <div className="w-full mt-4 space-y-4">
+            {/* Hanya tabel yang overflow */}
+            <div className="w-full overflow-x-auto rounded-xl border border-slate-200 bg-white">
+              <ArticleTable data={articles} />
+            </div>
+
+            {/* Pagination tetap di luar scroll area */}
+            <div className="w-full h-fit px-[16px] py-[12px]">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </div>
           </div>
-                    
-          <div className="w-full overflow-x-auto">
-            <ArticleTable data={articles} />
           </div>
-          <div className="w-full h-fit px-[16px] py-[12px]">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
           </div>
-        </div>
       </div>
     </div>
   );
